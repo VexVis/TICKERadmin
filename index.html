@@ -273,24 +273,27 @@
     }
 
     // Bild-Upload zu ImgBB
-    async function uploadImageToImgBB(file) {
-      const formData = new FormData();
-      formData.append("image", file);
+  // Bild-Upload zu ImgBB in voller Auflösung
+async function uploadImageToImgBB(file) {
+  const formData = new FormData();
+  formData.append("image", file);
 
-      try {
-        const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
-          method: "POST",
-          body: formData
-        });
-        const data = await res.json();
-        if (data.success) {
-          return data.data.url;
-        }
-      } catch (e) {
-        console.error("Upload Fehler:", e);
-      }
-      return null;
+  try {
+    // Parameter &expiration=0 verhindert Löschen und hält Qualität
+    const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+      method: "POST",
+      body: formData
+    });
+    const data = await res.json();
+    if (data.success) {
+      // Gibt die direkte Original-Bild-URL zurück statt des verkleinerten Thumbnails
+      return data.data.display_url || data.data.url;
     }
+  } catch (e) {
+    console.error("Upload Fehler:", e);
+  }
+  return null;
+}
 
     // JSONBin Update
     async function sendToJSONBin(headline, imageUrl) {
