@@ -361,22 +361,30 @@
       return null;
     }
 
-    async function sendToJSONBin(category, headline, imageUrl) {
-      try {
-        const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Master-Key": JSONBIN_KEY
-          },
-          body: JSON.stringify({ category, headline, imageUrl })
-        });
-        return response.ok;
-      } catch (err) {
-        console.error("JSONBin Fehler:", err);
-        return false;
-      }
+  async function sendToJSONBin(category, headline, imageUrl) {
+  try {
+    const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Master-Key": JSONBIN_KEY
+      },
+      body: JSON.stringify({ category, headline, imageUrl })
+    });
+
+    if (!response.ok) {
+      console.error("HTTP-Fehlercode:", response.status);
+      updateStatus(`Fehler HTTP ${response.status}`, "#cc0000");
+      return false;
     }
+    
+    return true;
+  } catch (err) {
+    console.error("Netzwerk/CORS Fehler:", err);
+    updateStatus("Netzwerk/CORS-Blockade", "#cc0000");
+    return false;
+  }
+}
 
     function updateStatus(text, color) {
       document.getElementById("statusText").textContent = text;
