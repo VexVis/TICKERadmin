@@ -216,7 +216,10 @@
         <input type="text" id="category" value="AKTUELLE LAGE">
 
         <label for="headline">Haupt-Schlagzeile:</label>
-        <input type="text" id="headline" placeholder="Schlagzeile eingeben...">
+        <input type="text" id="headline" placeholder="Haupt-Schlagzeile eingeben...">
+
+        <label for="subheadline">Unter-Schlagzeile / Details:</label>
+        <input type="text" id="subheadline" placeholder="Unter-Schlagzeile eingeben...">
       </div>
 
       <!-- BILD -->
@@ -245,7 +248,7 @@
 
   <script>
     const JSONBIN_ID = "6a61eac2da38895dfe83be0f";
-    const JSONBIN_KEY = "$2a$10$a050DKIMLJQqyrbsF2NU4OZRaFCZZhe7gCfdxVgOUFdwT0esiNc1e";
+    const JSONBIN_KEY = "$2a$10$aO50DKIMLJQqyrbsF2NU4OZRaFCZzhe7gCfdxVgOUFdwT0esiNc1e";
     const IMGBB_API_KEY = "70bf30d211974da33a7dc575513e96bc";
 
     // Presets für Schnell-Templates
@@ -253,31 +256,37 @@
       breaking: {
         category: "EILMELDUNG",
         headline: "SONDERKONFERENZ ZUR AKTUELLEN LAGE EINBERUFEN",
+        subheadline: "Regierung gibt Stellungnahme in Berlin ab",
         imageUrl: "https://picsum.photos/id/1062/200/120"
       },
       sport: {
         category: "SPORT",
         headline: "CHAMPIONS LEAGUE: BAYERN ZIEHT INS FINALE EIN",
+        subheadline: "Souveräner 3:1 Sieg im Rückspiel",
         imageUrl: "https://picsum.photos/id/1058/200/120"
       },
       finance: {
         category: "WIRTSCHAFT",
         headline: "NEUER REKORDSTAND ATTACKIERT DIE BÖRSENMÄRKTE",
+        subheadline: "DAX steigt auf Allzeithoch",
         imageUrl: "https://picsum.photos/id/1060/200/120"
       },
       gaming: {
         category: "GAMING",
         headline: "NEUES UPDATE BRINGT CROSSPLAY UND NEUE MAPS",
+        subheadline: "Patch 2.4 wird ab heute ausgerollt",
         imageUrl: "https://picsum.photos/id/1070/200/120"
       },
       tech: {
         category: "TECHNOLOGIE",
         headline: "KI-REVOLUTION: NEUE MODELLE DURCHBRECHEN GRENZEN",
+        subheadline: "Experten prognostizieren Durchbruch",
         imageUrl: "https://picsum.photos/id/1080/200/120"
       },
       weather: {
         category: "WETTERWARNUNG",
         headline: "STURMFRONT ERREICHT DEUTSCHLAND AM ABEND",
+        subheadline: "Meteorologen warnen vor Böen",
         imageUrl: "https://picsum.photos/id/1015/200/120"
       }
     };
@@ -289,6 +298,7 @@
       if (val !== "custom" && templates[val]) {
         document.getElementById("category").value = templates[val].category;
         document.getElementById("headline").value = templates[val].headline;
+        document.getElementById("subheadline").value = templates[val].subheadline;
         document.getElementById("imageUrl").value = templates[val].imageUrl;
         updatePreview(templates[val].imageUrl);
       }
@@ -313,6 +323,7 @@
     async function handleSend() {
       const category = document.getElementById("category").value;
       const headline = document.getElementById("headline").value;
+      const subheadline = document.getElementById("subheadline").value;
       const imageUrlInput = document.getElementById("imageUrl").value;
       const fileInput = document.getElementById("imageFile");
       
@@ -332,7 +343,7 @@
       }
 
       updateStatus("Aktualisiere OBS...", "#0055ea");
-      const success = await sendToJSONBin(category, headline, finalImageUrl);
+      const success = await sendToJSONBin(category, headline, subheadline, finalImageUrl);
 
       if (success) {
         updateStatus("Live geschaltet!", "#10b981");
@@ -361,30 +372,28 @@
       return null;
     }
 
-  async function sendToJSONBin(category, headline, imageUrl) {
-  try {
-    const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Master-Key": JSONBIN_KEY
-      },
-      body: JSON.stringify({ category, headline, imageUrl })
-    });
+    async function sendToJSONBin(category, headline, subheadline, imageUrl) {
+      try {
+        const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Master-Key": JSONBIN_KEY
+          },
+          body: JSON.stringify({ category, headline, subheadline, imageUrl })
+        });
 
-    if (!response.ok) {
-      console.error("HTTP-Fehlercode:", response.status);
-      updateStatus(`Fehler HTTP ${response.status}`, "#cc0000");
-      return false;
+        if (!response.ok) {
+          console.error("HTTP Fehler:", response.status);
+          return false;
+        }
+
+        return true;
+      } catch (err) {
+        console.error("JSONBin Fehler:", err);
+        return false;
+      }
     }
-    
-    return true;
-  } catch (err) {
-    console.error("Netzwerk/CORS Fehler:", err);
-    updateStatus("Netzwerk/CORS-Blockade", "#cc0000");
-    return false;
-  }
-}
 
     function updateStatus(text, color) {
       document.getElementById("statusText").textContent = text;
