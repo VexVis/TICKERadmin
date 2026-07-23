@@ -3,69 +3,297 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SELT - Handy Fernbedienung</title>
+  <title>SELT Control Panel - Windows XP</title>
   <style>
-    body {
-      font-family: -apple-system, sans-serif;
-      background: #081b26;
-      color: white;
-      padding: 20px;
-      max-width: 400px;
-      margin: 0 auto;
-    }
-    h2 { color: #e5b869; margin-bottom: 20px; }
-    label { display: block; margin-top: 15px; font-weight: bold; font-size: 0.9rem; }
-    input {
-      width: 100%;
-      padding: 12px;
-      margin-top: 5px;
-      border-radius: 6px;
-      border: 1px solid #334155;
-      background: #0f2b3c;
-      color: white;
+    /* Windows XP Luna Design System */
+    * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Tahoma", "Segoe UI", sans-serif;
     }
-    button {
+
+    body {
+      background: #0055ea; /* XP Desktop Blau */
+      background-image: radial-gradient(circle at 50% 30%, #3a83ff 0%, #0055ea 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+    }
+
+    /* Fenster Container */
+    .xp-window {
       width: 100%;
-      background: #e5b869;
-      color: #081b26;
+      max-width: 420px;
+      background: #ece9d8; /* Klassisches XP Grau/Beige */
+      border: 3px solid #0055ea;
+      border-radius: 8px 8px 0 0;
+      box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
+
+    /* XP Titan Titelleiste */
+    .xp-titlebar {
+      background: linear-gradient(to bottom, 
+        #0058ee 0%, 
+        #3593ff 4%, 
+        #288efb 6%, 
+        #0055ea 10%, 
+        #0055ea 90%, 
+        #0042b7 95%, 
+        #002479 100%);
+      padding: 6px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
       font-weight: bold;
-      padding: 14px;
-      border: none;
-      border-radius: 6px;
-      margin-top: 25px;
-      font-size: 1rem;
+      font-size: 12px;
+      text-shadow: 1px 1px 1px #000;
+      border-bottom: 1px solid #002479;
+    }
+
+    .xp-titlebar-buttons {
+      display: flex;
+      gap: 3px;
+    }
+
+    .xp-btn-close {
+      width: 21px;
+      height: 21px;
+      background: linear-gradient(to bottom, #e7664e 0%, #c1341d 100%);
+      border: 1px solid #ffffff;
+      border-radius: 3px;
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 1px 1px 0 rgba(255,255,255,0.5);
       cursor: pointer;
     }
-    button:active { opacity: 0.8; }
-    #status { margin-top: 15px; text-align: center; font-size: 0.85rem; color: #10b981; }
+
+    /* Fenster-Inhalt */
+    .xp-content {
+      padding: 15px;
+    }
+
+    .xp-fieldset {
+      border: 1px solid #d0ccc0;
+      border-radius: 4px;
+      padding: 12px;
+      margin-bottom: 12px;
+      background: #f7f5ef;
+    }
+
+    legend {
+      font-size: 11px;
+      font-weight: bold;
+      color: #0d286a;
+      padding: 0 4px;
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: bold;
+      color: #333;
+      margin-top: 8px;
+      margin-bottom: 3px;
+    }
+
+    /* Input Fields mit XP vertieftem Rahmen */
+    input[type="text"], input[type="file"] {
+      width: 100%;
+      padding: 5px 7px;
+      font-size: 12px;
+      border-top: 2px solid #716f64;
+      border-left: 2px solid #716f64;
+      border-right: 1px solid #f1efe2;
+      border-bottom: 1px solid #f1efe2;
+      background: #ffffff;
+      outline: none;
+    }
+
+    input[type="file"] {
+      padding: 3px;
+      background: #ece9d8;
+      font-size: 11px;
+    }
+
+    .divider {
+      text-align: center;
+      font-size: 10px;
+      color: #716f64;
+      margin: 8px 0;
+      font-weight: bold;
+    }
+
+    /* XP Standard-Button */
+    .xp-button {
+      width: 100%;
+      padding: 8px;
+      background: linear-gradient(to bottom, #ffffff 0%, #ece9d8 86%, #d8d0c2 100%);
+      border: 1px solid #003c74;
+      border-radius: 3px;
+      color: #000;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: inset -1px -1px 1px #a8a295, inset 1px 1px 1px #ffffff;
+      margin-top: 5px;
+    }
+
+    .xp-button:hover {
+      background: linear-gradient(to bottom, #fff8e5 0%, #fbe8bf 86%, #e0c283 100%);
+      border-color: #e59700;
+    }
+
+    .xp-button:active {
+      background: #dbceb9;
+      box-shadow: inset 1px 1px 2px #716f64;
+    }
+
+    /* Status-Leiste unten */
+    .xp-statusbar {
+      border-top: 1px solid #d0ccc0;
+      padding: 6px 10px;
+      font-size: 11px;
+      background: #ece9d8;
+      color: #444;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .xp-status-icon {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #999;
+    }
   </style>
 </head>
 <body>
 
-  <h2>SELT Remote Control</h2>
+  <div class="xp-window">
+    <!-- Titelleiste -->
+    <div class="xp-titlebar">
+      <span>SELT Control Panel v1.0.exe</span>
+      <div class="xp-titlebar-buttons">
+        <div class="xp-btn-close">X</div>
+      </div>
+    </div>
 
-  <label for="headline">Haupt-Schlagzeile:</label>
-  <input type="text" id="headline" placeholder="Neue Schlagzeile eingeben...">
+    <!-- Hauptinhalt -->
+    <div class="xp-content">
+      
+      <!-- Schlagzeilen Block -->
+      <div class="xp-fieldset">
+        <legend>Text-Steuerung</legend>
+        <label for="headline">Haupt-Schlagzeile:</label>
+        <input type="text" id="headline" placeholder="Neue Eilmeldung eingeben...">
+      </div>
 
-  <label for="imageUrl">Bild URL:</label>
-  <input type="text" id="imageUrl" placeholder="https://beispiel.de/bild.jpg">
+      <!-- Bild-Steuerung Block -->
+      <div class="xp-fieldset">
+        <legend>Bild-Steuerung</legend>
 
-  <button onclick="sendUpdate()">Senden & Live Schalten</button>
-  <div id="status"></div>
+        <label for="imageFile">1. Datei hochladen (vom Handy):</label>
+        <input type="file" id="imageFile" accept="image/*">
+
+        <div class="divider">- ODER -</div>
+
+        <label for="imageUrl">2. Bild-URL direkt eingeben:</label>
+        <input type="text" id="imageUrl" placeholder="https://beispiel.de/bild.jpg">
+      </div>
+
+      <!-- Senden Button -->
+      <button class="xp-button" onclick="handleSend()">[ OK ] Senden & Live Schalten</button>
+
+    </div>
+
+    <!-- Statusleiste -->
+    <div class="xp-statusbar">
+      <div class="xp-status-icon" id="statusDot"></div>
+      <span id="statusText">Bereit.</span>
+    </div>
+  </div>
 
   <script>
+    // ==========================================
+    // DEINE KEYS HIER EINTRAGEN
+    // ==========================================
     const JSONBIN_ID = "6a61eac2da38895dfe83be0f";
     const JSONBIN_KEY = "$2a$10$aO50DKIMLJQqyrbsF2NU4OZRaFCZzhe7gCfdxVgOUFdwT0esiNc1e";
+    const IMGBB_API_KEY = "70bf30d211974da33a7dc575513e96bc"; // Von https://api.imgbb.com/
 
-    async function sendUpdate() {
+    async function handleSend() {
       const headline = document.getElementById("headline").value;
-      const imageUrl = document.getElementById("imageUrl").value;
-      const status = document.getElementById("status");
+      const imageUrlInput = document.getElementById("imageUrl").value;
+      const fileInput = document.getElementById("imageFile");
+      
+      updateStatus("Verarbeite Daten...", "#e59700");
 
-      status.style.color = "#e5b869";
-      status.textContent = "Sende Daten...";
+      let finalImageUrl = imageUrlInput;
 
+      // 1. Wenn eine Datei ausgewählt wurde -> Erst auf ImgBB hochladen
+      if (fileInput.files.length > 0) {
+        if (IMGBB_API_KEY === "DEIN_IMGBB_API_KEY_HIER") {
+          alert("Bitte trage erst deinen IMGBB_API_KEY im Code ein!");
+          updateStatus("Fehler: API Key fehlt.", "#cc0000");
+          return;
+        }
+
+        updateStatus("Lade Bild hoch...", "#0055ea");
+        const uploadedUrl = await uploadImageToImgBB(fileInput.files[0]);
+        
+        if (uploadedUrl) {
+          finalImageUrl = uploadedUrl;
+        } else {
+          updateStatus("Bild-Upload fehlgeschlagen!", "#cc0000");
+          return;
+        }
+      }
+
+      // 2. Daten an JSONBin senden
+      updateStatus("Aktualisiere OBS...", "#0055ea");
+      const success = await sendToJSONBin(headline, finalImageUrl);
+
+      if (success) {
+        updateStatus("Live geschaltet!", "#10b981");
+        // Bild-Auswahl zurücksetzen
+        fileInput.value = "";
+      } else {
+        updateStatus("Sende-Fehler!", "#cc0000");
+      }
+    }
+
+    // Bild-Upload zu ImgBB
+    async function uploadImageToImgBB(file) {
+      const formData = new FormData();
+      formData.append("image", file);
+
+      try {
+        const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+          method: "POST",
+          body: formData
+        });
+        const data = await res.json();
+        if (data.success) {
+          return data.data.url;
+        }
+      } catch (e) {
+        console.error("Upload Fehler:", e);
+      }
+      return null;
+    }
+
+    // JSONBin Update
+    async function sendToJSONBin(headline, imageUrl) {
       try {
         const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}`, {
           method: "PUT",
@@ -75,18 +303,16 @@
           },
           body: JSON.stringify({ headline, imageUrl })
         });
-
-        if (response.ok) {
-          status.style.color = "#10b981";
-          status.textContent = "✓ Erfolgreich auf OBS aktualisiert!";
-        } else {
-          status.style.color = "#ef4444";
-          status.textContent = "Fehler beim Senden.";
-        }
+        return response.ok;
       } catch (err) {
-        status.style.color = "#ef4444";
-        status.textContent = "Netzwerkfehler.";
+        console.error("JSONBin Fehler:", err);
+        return false;
       }
+    }
+
+    function updateStatus(text, color) {
+      document.getElementById("statusText").textContent = text;
+      document.getElementById("statusDot").style.background = color;
     }
   </script>
 </body>
