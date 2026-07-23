@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SELT - Handy Fernbedienung</title>
+  <style>
+    body {
+      font-family: -apple-system, sans-serif;
+      background: #081b26;
+      color: white;
+      padding: 20px;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    h2 { color: #e5b869; margin-bottom: 20px; }
+    label { display: block; margin-top: 15px; font-weight: bold; font-size: 0.9rem; }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      border-radius: 6px;
+      border: 1px solid #334155;
+      background: #0f2b3c;
+      color: white;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      background: #e5b869;
+      color: #081b26;
+      font-weight: bold;
+      padding: 14px;
+      border: none;
+      border-radius: 6px;
+      margin-top: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:active { opacity: 0.8; }
+    #status { margin-top: 15px; text-align: center; font-size: 0.85rem; color: #10b981; }
+  </style>
+</head>
+<body>
+
+  <h2>SELT Remote Control</h2>
+
+  <label for="headline">Haupt-Schlagzeile:</label>
+  <input type="text" id="headline" placeholder="Neue Schlagzeile eingeben...">
+
+  <label for="imageUrl">Bild URL:</label>
+  <input type="text" id="imageUrl" placeholder="https://beispiel.de/bild.jpg">
+
+  <button onclick="sendUpdate()">Senden & Live Schalten</button>
+  <div id="status"></div>
+
+  <script>
+    const JSONBIN_ID = "DEINE_BIN_ID_HIER";
+    const JSONBIN_KEY = "DEIN_MASTER_KEY_HIER";
+
+    async function sendUpdate() {
+      const headline = document.getElementById("headline").value;
+      const imageUrl = document.getElementById("imageUrl").value;
+      const status = document.getElementById("status");
+
+      status.style.color = "#e5b869";
+      status.textContent = "Sende Daten...";
+
+      try {
+        const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Master-Key": JSONBIN_KEY
+          },
+          body: JSON.stringify({ headline, imageUrl })
+        });
+
+        if (response.ok) {
+          status.style.color = "#10b981";
+          status.textContent = "✓ Erfolgreich auf OBS aktualisiert!";
+        } else {
+          status.style.color = "#ef4444";
+          status.textContent = "Fehler beim Senden.";
+        }
+      } catch (err) {
+        status.style.color = "#ef4444";
+        status.textContent = "Netzwerkfehler.";
+      }
+    }
+  </script>
+</body>
+</html>
