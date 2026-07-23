@@ -24,7 +24,7 @@
 
     .xp-window {
       width: 100%;
-      max-width: 460px;
+      max-width: 480px;
       background: #ece9d8;
       border: 3px solid #0055ea;
       border-radius: 8px 8px 0 0;
@@ -130,7 +130,7 @@
 
     .preview-box {
       width: 100%;
-      height: 70px;
+      height: 90px;
       border: 1px solid #a0a0a0;
       margin-top: 6px;
       border-radius: 3px;
@@ -186,7 +186,7 @@
 
   <div class="xp-window">
     <div class="xp-titlebar">
-      <span>SELT Control Panel v2.0 (Templates)</span>
+      <span>SELT Control Panel v2.0</span>
       <div class="xp-titlebar-buttons">
         <div class="xp-btn-close">X</div>
       </div>
@@ -200,12 +200,18 @@
         <label for="templateSelect">Kategorie / Motiv wählen:</label>
         <select id="templateSelect" onchange="applyTemplate()">
           <option value="custom">-- Benutzerdefiniert --</option>
-          <option value="breaking">🔴 EILMELDUNG / General News</option>
-          <option value="sport">⚽ SPORT / Champions League</option>
-          <option value="finance">📈 WIRTSCHAFT / Börse</option>
-          <option value="gaming">🎮 GAMING / Esports</option>
-          <option value="tech">💻 TECH / Digitales</option>
-          <option value="weather">☀️ WETTER / Unwetter</option>
+          <option value="breaking">🔴 EILMELDUNG / Akuter Anlass</option>
+          <option value="sport">⚽ SPORT / Wettkampf & Ereignis</option>
+          <option value="finance">📈 WIRTSCHAFT / Märkte & Finanzen</option>
+          <option value="crypto">🪙 KRYPTO / Digitale Assets</option>
+          <option value="gaming">🎮 GAMING / Updates & Releases</option>
+          <option value="tech">💻 TECHNOLOGIE / Innovationen</option>
+          <option value="science">🔬 WISSENSCHAFT / Forschung</option>
+          <option value="space">🚀 RAUMFAHRT / Raumfahrt & Kosmos</option>
+          <option value="weather">☀️ WETTER / Wetterlage & Warnung</option>
+          <option value="elections">🗳️ WAHLEN / Politik & Abstimmung</option>
+          <option value="culture">🎬 KULTUR / Event & Unterhaltung</option>
+          <option value="traffic">🚗 VERKEHR / Lage & Meldungen</option>
         </select>
       </div>
 
@@ -234,7 +240,7 @@
         <input type="text" id="imageUrl" placeholder="https://..." oninput="updatePreview(this.value)">
 
         <label>Vorschau:</label>
-        <img id="imgPreview" class="preview-box" src="https://picsum.photos/id/1062/200/120" alt="Vorschau">
+        <img id="imgPreview" class="preview-box" src="https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=400&auto=format&fit=crop" alt="Vorschau">
       </div>
 
       <button class="xp-button" onclick="handleSend()">[ OK ] Senden & Live Schalten</button>
@@ -251,43 +257,79 @@
     const JSONBIN_KEY = "$2a$10$aO50DKIMLJQqyrbsF2NU4OZRaFCZzhe7gCfdxVgOUFdwT0esiNc1e";
     const IMGBB_API_KEY = "70bf30d211974da33a7dc575513e96bc";
 
-    // Presets für Schnell-Templates
+    // Allgemeine, vollkommen universelle Presets ohne spezifische Beispiele
     const templates = {
       breaking: {
         category: "EILMELDUNG",
-        headline: "SONDERKONFERENZ ZUR AKTUELLEN LAGE EINBERUFEN",
-        subheadline: "Regierung gibt Stellungnahme in Berlin ab",
-        imageUrl: "https://picsum.photos/id/1062/200/120"
+        headline: "WICHTIGE ENTWICKLUNG ZUR AKTUELLEN LAGE",
+        subheadline: "Alle Informationen und Hintergründe im Überblich",
+        imageUrl: "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=400&auto=format&fit=crop"
       },
       sport: {
         category: "SPORT",
-        headline: "CHAMPIONS LEAGUE: BAYERN ZIEHT INS FINALE EIN",
-        subheadline: "Souveräner 3:1 Sieg im Rückspiel",
-        imageUrl: "https://picsum.photos/id/1058/200/120"
+        headline: "ENTSCHEIDUNG IM AKTUELLEN WETTKAMPF GEFALLEN",
+        subheadline: "Ergebnisse und Highlights des Spieltags",
+        imageUrl: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?w=400&auto=format&fit=crop"
       },
       finance: {
         category: "WIRTSCHAFT",
-        headline: "NEUER REKORDSTAND ATTACKIERT DIE BÖRSENMÄRKTE",
-        subheadline: "DAX steigt auf Allzeithoch",
-        imageUrl: "https://picsum.photos/id/1060/200/120"
+        headline: "NEUE BEWEGUNG AN DEN INTERNATIONALEN MÄRKTEN",
+        subheadline: "Analysen und Reaktionen zur aktuellen Marktlage",
+        imageUrl: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&auto=format&fit=crop"
+      },
+      crypto: {
+        category: "KRYPTO",
+        headline: "KURSBEWEGUNGEN BEI DIGITALEN WÄHRUNGEN",
+        subheadline: "Aktuelle Marktdaten und Reaktionen der Anleger",
+        imageUrl: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&auto=format&fit=crop"
       },
       gaming: {
         category: "GAMING",
-        headline: "NEUES UPDATE BRINGT CROSSPLAY UND NEUE MAPS",
-        subheadline: "Patch 2.4 wird ab heute ausgerollt",
-        imageUrl: "https://picsum.photos/id/1070/200/120"
+        headline: "NEUES UPDATE UND INHALTE FREIGESCHALTET",
+        subheadline: "Alle Änderungen und Neuerungen in der Übersicht",
+        imageUrl: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&auto=format&fit=crop"
       },
       tech: {
         category: "TECHNOLOGIE",
-        headline: "KI-REVOLUTION: NEUE MODELLE DURCHBRECHEN GRENZEN",
-        subheadline: "Experten prognostizieren Durchbruch",
-        imageUrl: "https://picsum.photos/id/1080/200/120"
+        headline: "NEUE INNOVATION VORGESTELLT UND PREPRÄSENTIERT",
+        subheadline: "Funktionen und Zukunftsaussichten im Fokus",
+        imageUrl: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&auto=format&fit=crop"
+      },
+      science: {
+        category: "WISSENSCHAFT",
+        headline: "NEUE ERKENNTNISSE AUS DER AKTUELLEN FORSCHUNG",
+        subheadline: "Ergebnisse der wissenschaftlichen Untersuchungen",
+        imageUrl: "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=400&auto=format&fit=crop"
+      },
+      space: {
+        category: "RAUMFAHRT",
+        headline: "FORTSCHRITTE BEI DER AKTUELLEN WELTRAUMMISSION",
+        subheadline: "Neue Daten und Bilder aus dem Orbit eingetroffen",
+        imageUrl: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&auto=format&fit=crop"
       },
       weather: {
         category: "WETTERWARNUNG",
-        headline: "STURMFRONT ERREICHT DEUTSCHLAND AM ABEND",
-        subheadline: "Meteorologen warnen vor Böen",
-        imageUrl: "https://picsum.photos/id/1015/200/120"
+        headline: "WICHTIGE HINWEISE ZUR AKTUELLEN WETTERLAGE",
+        subheadline: "Regionale Entwicklungen und Vorhersagen",
+        imageUrl: "https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?w=400&auto=format&fit=crop"
+      },
+      elections: {
+        category: "POLITIK",
+        headline: "OFFIZIELLE ERGEBNISSE UND PROGNOSEN VORLIEGEND",
+        subheadline: "Reaktionen und weitere Schritte im Überblick",
+        imageUrl: "https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?w=400&auto=format&fit=crop"
+      },
+      culture: {
+        category: "KULTUR",
+        headline: "GROSSVERANSTALTUNG ERFOLGREICH GESTARTET",
+        subheadline: "Programmübersicht und Highlights des Tages",
+        imageUrl: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&auto=format&fit=crop"
+      },
+      traffic: {
+        category: "VERKEHR",
+        headline: "AKTUELLER HINWEIS ZUR VERKEHRSSITUATION",
+        subheadline: "Beinträchtigungen und Ausweichrouten beachten",
+        imageUrl: "https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=400&auto=format&fit=crop"
       }
     };
 
